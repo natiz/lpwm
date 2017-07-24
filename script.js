@@ -1,5 +1,3 @@
-var url = "https://exampleauth.cloud.lprnd.net:1980";
-
 if (site) {
     $("#lp_account").attr("disabled", "disabled");
     $("#lp_account").val(site);
@@ -11,34 +9,11 @@ if (site && username) {
 
     $("#lp_btn_login").hide();
 
-    lpTag.sdes.push({"type": "ctmrinfo", "info": {customerId: username}});
+    lpTag.sdes.push({"type": "ctmrinfo", "info": {customerId: "lpTest" + username}});
 
     window.LPJsMethodName = function (callback) {
-        $.ajax({
-            url: url + '/login',
-            contentType: "application/json",
-            data: {
-                username: username
-            },
-            success: function (data) {
-                $.ajax(url + "/generateSsoKey?rt=json&username=" + username, {
-                    type: 'get',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        if (XMLHttpRequest.responseJSON === undefined || XMLHttpRequest.responseJSON.message === undefined) {
-                            callback('UNKNOWN ERROR', 'error occured');
-                        } else {
-                            callback('ERROR', XMLHttpRequest.responseJSON.message);
-                        }
-
-                    },
-                    success: function (ssoData) {
-                        callback(ssoData.ssoKey);
-
-                    }
-                });
-            }
-        });
-    }
+        callback(username);
+    };
 }
 else {
     $("#lp_form").submit(function (e) {
@@ -48,18 +23,25 @@ else {
         var username = $("#lp_username").val();
         var href;
 
-        $.ajax(url + "/generateSsoKey?rt=json&username=" + username, {
-            type: 'get',
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-
+        $.ajax({
+            url: url + '/login',
+            contentType: "application/json",
+            data: {
+                username: username
             },
-            success: function (ssoData) {
-                href = updateQueryStringParameter(window.location.href, "site", site);
-                window.location.href = updateQueryStringParameter(href, "username", username);
+            success: function () {
+                $.ajax(url + "/generateSsoKey?rt=json&username=" + username, {
+                    type: 'get',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.error("Failed to generate SSO Key", textStatus, errorThrown);
+                    },
+                    success: function () {
+                        href = updateQueryStringParameter(window.location.href, "site", site);
+                        window.location.href = updateQueryStringParameter(href, "username", username);
+                    }
+                });
             }
         });
-
 
         function updateQueryStringParameter(uri, key, value) {
             var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
@@ -74,7 +56,7 @@ else {
     });
 }
 
-$('#lp_lnk_setup').click(function(){
+$('#lp_lnk_setup').click(function () {
     var isDescriptionDisplay = $('#lp_account_setup_description').css('display') === 'block';
     $('#lp_account_setup_description').css('display', isDescriptionDisplay ? 'none' : 'block');
 });
