@@ -26,7 +26,12 @@
         if(!visitorName) {
             visitorName = queryParams.client_id
         }
-        window.location.href = queryParams.redirect_uri + "&code=" + visitorName;
+        var url = queryParams.redirect_uri;
+        if (queryParams.state) {
+            url += '?state=' + queryParams.state;
+        }
+        url += '&code=' + visitorName;
+        window.location.href = url;
     }
 
 </script>
