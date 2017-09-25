@@ -28,9 +28,9 @@ else {
             contentType: "application/json",
             data: {
                 client_id: "BscG0X3K6R8dgFZf90ydTUOETQztDvrq",
-	            client_secret: "u1qHTi_DQ7GVy-Z_9jI7wknEppVpvKYFZ7nTf_JrXlaRDVRorEz3xni5mG_4v7k0",
-	            audience: "https://barakauth.auth0.com/api/v2/",
-	            grant_type: "client_credentials"
+	    	client_secret: "u1qHTi_DQ7GVy-Z_9jI7wknEppVpvKYFZ7nTf_JrXlaRDVRorEz3xni5mG_4v7k0",
+	    	audience: "https://barakauth.auth0.com/api/v2/",
+	    	grant_type: "client_credentials"
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.error("Failed to generate JWT", textStatus, errorThrown);
