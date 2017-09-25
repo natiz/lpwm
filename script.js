@@ -35,9 +35,9 @@ else {
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         console.error("Failed to generate SSO Key", textStatus, errorThrown);
                     },
-                    success: function () {
+                    success: function (data) {
                         href = updateQueryStringParameter(window.location.href, "site", site);
-                        window.location.href = updateQueryStringParameter(href, "username", username);
+                        window.location.href = updateQueryStringParameter(href, "username", (data && data.ssoKey) || username);
                     }
                 });
             }
