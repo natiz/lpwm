@@ -9,13 +9,22 @@
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script>
         function getURLParams(search) {
-            var queryParams = {}, queryArray, singleQuery;
-            queryArray = search.substr(1).split("&");
-            for (var i = 0; i < queryArray.length; i++) {
-                if (queryArray[i].indexOf("=") > -0) {
-                    singleQuery = queryArray[i].split("=");
-                    if (singleQuery.length == 2) {
-                        queryParams[decodeURIComponent(singleQuery[0])] = decodeURIComponent(singleQuery[1]);
+            var queryParams = window.getURLParams(window.location.search),
+                hashParams = window.getURLParams(window.location.hash);
+
+            if (hashParams) {
+                for (var key in hashParams) {
+                    if (hashParams.hasOwnProperty(key) && !queryParams.hasOwnProperty(key)) {
+                        queryParams[key] = hashParams[key];
+                    }
+                }
+            }
+
+            var state = queryParams.state ? JSON.parse(decodeURIComponent(queryParams.state)) : {};
+            if (state) {
+                for (var param in state) {
+                    if (state.hasOwnProperty(param) && !queryParams.hasOwnProperty(param)) {
+                        queryParams[param] = state[param];
                     }
                 }
             }
