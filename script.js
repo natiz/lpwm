@@ -3,7 +3,7 @@ if (site) {
     $("#lp_account").val(site);
 }
 
-if (site && username) {
+if (site && username && access_token) {
     $("#lp_username").attr("disabled", "disabled");
     $("#lp_username").val(username);
 
@@ -12,7 +12,7 @@ if (site && username) {
     lpTag.sdes.push({"type": "ctmrinfo", "info": {customerId: "lpTest" + username}});
 
     window.LPJsMethodName = function (callback) {
-        callback(username, window.location.href);
+        callback(access_token, window.location.href);
     };
 }
 else {
@@ -39,7 +39,9 @@ else {
             },
             success: function (data) {
                 href = updateQueryStringParameter(window.location.href, "site", site);
-                window.location.href = updateQueryStringParameter(href, "username", (data && data.access_token) || username);
+                href = updateQueryStringParameter(href, "username", username);
+                href = updateQueryStringParameter(href, "access_token", (data && data.access_token));
+                window.location.href = href;
             }
         });
 
