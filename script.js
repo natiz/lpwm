@@ -24,22 +24,22 @@ else {
         var href;
 
         $.ajax({
-            url: url + '/login',
-            contentType: "application/json",
-            data: {
-                username: username
+            url: 'https://barakauth.auth0.com/oauth/token',
+            contentType: 'application/json',
+			type: 'POST',
+			processData: false,
+            data: JSON.stringify({
+                client_id: 'BscG0X3K6R8dgFZf90ydTUOETQztDvrq',
+	    		client_secret: 'u1qHTi_DQ7GVy-Z_9jI7wknEppVpvKYFZ7nTf_JrXlaRDVRorEz3xni5mG_4v7k0',
+	    		audience: 'https://barakauth.auth0.com/api/v2/',
+	    		grant_type: 'client_credentials'
+            }),
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.error('Failed to generate JWT', textStatus, errorThrown);
             },
-            success: function () {
-                $.ajax(url + "/generateSsoKey?rt=json&username=" + username, {
-                    type: 'get',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        console.error("Failed to generate SSO Key", textStatus, errorThrown);
-                    },
-                    success: function (data) {
-                        href = updateQueryStringParameter(window.location.href, "site", site);
-                        window.location.href = updateQueryStringParameter(href, "username", (data && data.ssoKey) || username);
-                    }
-                });
+            success: function (data) {
+                href = updateQueryStringParameter(window.location.href, "site", site);
+                window.location.href = updateQueryStringParameter(href, "username", (data && data.access_token) || username);
             }
         });
 
