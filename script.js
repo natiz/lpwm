@@ -3,21 +3,23 @@ if (site) {
     $("#lp_account").val(site);
 }
 
-if (site && username && access_token) {
+if (site && username) {
     $("#lp_username").attr("disabled", "disabled");
     $("#lp_username").val(username);
 
     $("#lp_btn_login").hide();
 
-    lpTag.sdes.push({"type": "ctmrinfo", "info": {customerId: "lpTest" + username}});
+    if (access_token) {
+        lpTag.sdes.push({"type": "ctmrinfo", "info": {customerId: "lpTest" + username}});
 
-    window.LPJsMethodName = function (callback) {
-        callback(access_token, window.location.href);
-    };
+        window.LPJsMethodName = function (callback) {
+            callback(access_token, window.location.href);
+        };
+    } else {
+        ajaxLogin(site, username);
+    }
 }
-else if (site && username) {
-    ajaxLogin(site, username);
-} else {
+else {
     $("#lp_form").submit(function (e) {
         e.preventDefault();
         var url = "https://exampleauth.cloud.lprnd.net:1980";
