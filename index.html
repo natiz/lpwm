@@ -31,8 +31,10 @@
             return queryParams;
         }
 
-        var site = getURLParams(window.location.search).site || "";
-        var username = getURLParams(window.location.search).username || "";
+        var urlParams = getURLParams(window.location.search);
+        var site = urlParams.site || "";
+        var username = urlParams.username || "";
+        var access_token = urlParams.access_token || "";
     </script>
     <!-- BEGIN LivePerson Monitor. -->
     <script type="text/javascript">
