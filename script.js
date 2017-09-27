@@ -13,7 +13,7 @@ if (site && username) {
         lpTag.sdes.push({"type": "ctmrinfo", "info": {customerId: "lpTest" + username}});
 
         window.LPJsMethodName = function (callback) {
-            callback(access_token, window.location.href);
+            callback(access_token);
         };
     } else {
         ajaxLogin(site, username);
