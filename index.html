@@ -9,6 +9,24 @@
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script>
         function getURLParams(search) {
+            var queryParams = {}, queryArray, singleQuery;
+
+            if ("string" === typeof search) {
+                queryArray = search.substr(1).split("&");
+                for (var i = 0; i < queryArray.length; i++) {
+                    if (queryArray[i].indexOf("=") > -0) {
+                        singleQuery = queryArray[i].split("=");
+                        if (singleQuery.length == 2) {
+                            queryParams[decodeURIComponent(singleQuery[0])] = decodeURIComponent(singleQuery[1]);
+                        }
+                    }
+                }
+            }
+
+            return queryParams;
+        }
+        
+        function getAllURLParams() {
             var queryParams = window.getURLParams(window.location.search),
                 hashParams = window.getURLParams(window.location.hash);
 
@@ -31,7 +49,7 @@
             return queryParams;
         }
 
-        var urlParams = getURLParams(window.location.search);
+        var urlParams = getAllURLParams();
         var site = urlParams.site || "";
         var username = urlParams.username || "";
         var access_token = urlParams.access_token || "";
