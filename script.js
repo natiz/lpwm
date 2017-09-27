@@ -1,3 +1,42 @@
+function _getURLParams(search) {
+    var queryParams = {}, queryArray, singleQuery;
+    if ("string" === typeof search) {
+        queryArray = search.substr(1).split("&");
+        for (var i = 0; i < queryArray.length; i++) {
+            if (queryArray[i].indexOf("=") > -0) {
+                singleQuery = queryArray[i].split("=");
+                if (singleQuery.length == 2) {
+                    queryParams[decodeURIComponent(singleQuery[0])] = decodeURIComponent(singleQuery[1]);
+                }
+            }
+        }
+    }
+    return queryParams;
+}
+
+function _getAllURLParams() {
+    var queryParams = _getURLParams(window.location.search),
+        hashParams = _getURLParams(window.location.hash);
+    if (hashParams) {
+        for (var key in hashParams) {
+            if (hashParams.hasOwnProperty(key) && !queryParams.hasOwnProperty(key)) {
+                queryParams[key] = hashParams[key];
+            }
+        }
+    }
+    var state = queryParams.state ? JSON.parse(decodeURIComponent(queryParams.state)) : {};
+    if (state) {
+        for (var param in state) {
+            if (state.hasOwnProperty(param) && !queryParams.hasOwnProperty(param)) {
+                queryParams[param] = state[param];
+            }
+        }
+    }
+    return queryParams;
+}
+var urlParams = _getAllURLParams();
+var access_token = urlParams.access_token || "";
+
 if (site) {
     $("#lp_account").attr("disabled", "disabled");
     $("#lp_account").val(site);
